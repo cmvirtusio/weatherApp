@@ -1,0 +1,13 @@
+
+
+<div>
+    <form>
+        <input type="text" class="txt" name="item" [(ngModel)]="city">
+        <br>
+        <input type="submit" class="btn" value="Pull Data Using API" (click)="getValues()">
+    </form>
+</div>
+
+<div *ngIf="chart">
+  <canvas id="canvas">{{ chart }}</canvas>
+</div>
