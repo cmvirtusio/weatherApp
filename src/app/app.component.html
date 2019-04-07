@@ -1,13 +1,250 @@
+<ngb-accordion #acc="ngbAccordion" activeIds="preRetirementPanel, runSimulationPanel">
+  <ngb-panel id="preRetirementPanel" title=" Portfolio Information and Assumptions">
+    <ng-template ngbPanelContent>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <label>Number Of Simulations:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" class="form-control" [(ngModel)]="numberOfSimulations">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Inflation Rate:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="inflationRate">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Sharpe Ratio:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" class="form-control" [(ngModel)]="sharpeRatio">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm"><label>VC Returns:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="vcReturn">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm"><label>C Returns:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="cReturn">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm"><label>B Returns:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="bReturn">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm"><label>G Returns:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="gReturn">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm"><label>AG Returns:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="agReturn">
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel title="Pre Retirement Information">
+    <ng-template ngbPanelContent>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <label>Personal Risk Profile:</label>
+          </div>
+          <div class="col-sm">
+            <select class="browser-default custom-select" [(ngModel)]="riskProfile">
+              <option *ngFor="let portfolioModel of portfolioModels" [ngValue]="portfolioModel">
+                {{portfolioModel.longName}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Retirement Target (Present Value):</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" class="form-control" [(ngModel)]="retirementTarget">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Current Age:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" class="form-control" (blur)="populateCashFlowData()" [(ngModel)]="currentAge">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Retirement Age:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" class="form-control" (blur)="populateCashFlowData(); populatePostRetirementData();"
+              [(ngModel)]="retirementAge">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Initial Investment:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" class="form-control" (blur)="populateCashFlowData()" [(ngModel)]="initialInvestment">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Future CashFlow:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="100" class="form-control" (blur)="populateCashFlowData()"
+              [(ngModel)]="futureCashFlow">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>CashFlow Growth:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" (blur)="populateCashFlowData()"
+              [(ngModel)]="futureCashFlowGrowth">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Adjust CashFlow with Inflation:</label>
+          </div>
+          <div class="col-sm">
+            <input type="checkbox" class="form-control" [(ngModel)]="isAdjustedForInflation"
+              (change)="populateCashFlowData()">
+          </div>
+        </div>
 
+        <ng-template #content let-c="close" let-d="dismiss">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">CashFlow Data</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- {{manualCFData}} -->
+            <div class="row">
+              <div class="col-md-4 col-xs-4"
+                *ngFor="let cashflow of manualCFData;let index = index;trackBy:trackByIndex;">
+                <label>{{ currentAge + index }}:</label>
+                <input type="number" [(ngModel)]="manualCFData[index]" (blur)="updateManualCFData(manualCFData)"
+                  placeholder="item" required>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="c(saveCFData(manualCFData))">Save</button>
+          </div>
+        </ng-template>
+        <div class="row">
+          <div class="col-sm">
+            <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Update CashFlow Manually</button>
+          </div>
+        </div>
+        <!-- CashFlowChart -->
+        {{cfData}}
+      </div>
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel title="Post Retirement Information">
+    <ng-template ngbPanelContent>
+      <div class="container">
 
-<div>
-    <form>
-        <input type="text" class="txt" name="item" [(ngModel)]="city">
-        <br>
-        <input type="submit" class="btn" value="Pull Data Using API" (click)="getValues()">
-    </form>
-</div>
-
-<div *ngIf="chart">
-  <canvas id="canvas">{{ chart }}</canvas>
-</div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Death Age:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" class="form-control" (blur)="populatePostRetirementData()" [(ngModel)]="deathAge">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Future Draw:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="100" class="form-control" (blur)="populatePostRetirementData()"
+              [(ngModel)]="futureDraw">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm">
+            <label>Future DrawGrowth:</label>
+          </div>
+          <div class="col-sm">
+            <input type="number" step="0.01" class="form-control" (blur)="populatePostRetirementData()"
+              [(ngModel)]="futureDrawGrowth">
+          </div>
+        </div>
+        {{postRetirementCFData}}
+      </div>
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel id="runSimulationPanel" title="Run Simulation">
+    <ng-template ngbPanelContent>
+      <div class="container">
+        <div class="row">
+          <div class="col-3">
+            <input type="checkbox" class="form-control" [(ngModel)]="includePostRetirementInModel">
+          </div>
+          <div class="col-3">
+            <label>Post Retirement Included in the Model:</label>
+          </div>
+          <div class="col-6">
+            <button class="btn btn-lg btn-outline-primary"
+              (click)="acc.collapseAll(); runSimulation(); acc.toggle('simulationsVisualization');">Run
+              Simulation</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel id="simulationsVisualization" title="Simulations">
+    <ng-template ngbPanelContent>
+      <ngb-tabset>
+        <ngb-tab title="Dynamic Portfolio Model">
+          <ng-template ngbTabContent>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="VC Portfolio">
+          <ng-template ngbTabContent>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="B Portfolio">
+          <ng-template ngbTabContent>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab title="AG Portfolio">
+          <ng-template ngbTabContent>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>

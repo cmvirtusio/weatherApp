@@ -1,13 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-//This Enables http calls;
-import { HttpClientModule } from '@angular/common/http';
-import { WeatherService } from './weather.service';
-//enable twowaybinding
+
 import { FormsModule } from '@angular/forms';
 
-import { AppComponent } from './app.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
+import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
@@ -15,10 +13,10 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    FormsModule 
+    FormsModule,
+    NgbModule.forRoot()
   ],
-  providers: [WeatherService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
