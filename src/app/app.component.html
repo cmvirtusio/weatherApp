@@ -1,5 +1,5 @@
 <ngb-accordion #acc="ngbAccordion" activeIds="preRetirementPanel, runSimulationPanel">
-  <ngb-panel id="preRetirementPanel" title=" Portfolio Information and Assumptions">
+  <ngb-panel title=" Portfolio Information and Assumptions">
     <ng-template ngbPanelContent>
       <div class="container">
         <div class="row">
@@ -64,7 +64,7 @@
       </div>
     </ng-template>
   </ngb-panel>
-  <ngb-panel title="Pre Retirement Information">
+  <ngb-panel id="preRetirementPanel" title="Pre Retirement Information">
     <ng-template ngbPanelContent>
       <div class="container">
         <div class="row">
@@ -168,14 +168,21 @@
           </div>
         </div>
         <!-- CashFlowChart -->
-        {{cfData}}
+        <!-- {{cfData}} -->
+        <div>
+          <div style="display: block">
+            <canvas baseChart [datasets]="barChartDataCFPreRetirement" [labels]="barChartLabelsCFPreRetirement"
+              [options]="barChartOptionsCFPreRetirement" [legend]="barChartLegendCFPreRetirement"
+              [chartType]="barChartTypeCFPreRetirement">
+            </canvas>
+          </div>
+        </div>
       </div>
     </ng-template>
   </ngb-panel>
   <ngb-panel title="Post Retirement Information">
     <ng-template ngbPanelContent>
       <div class="container">
-
         <div class="row">
           <div class="col-sm">
             <label>Death Age:</label>
@@ -202,7 +209,15 @@
               [(ngModel)]="futureDrawGrowth">
           </div>
         </div>
-        {{postRetirementCFData}}
+        <!-- {{postRetirementCFData}} -->
+        <div>
+          <div style="display: block">
+            <canvas baseChart [datasets]="barChartDataCFPostRetirement" [labels]="barChartLabelsCFPostRetirement"
+              [options]="barChartOptionsCFPostRetirement" [legend]="barChartLegendCFPostRetirement"
+              [chartType]="barChartTypeCFPostRetirement">
+            </canvas>
+          </div>
+        </div>
       </div>
     </ng-template>
   </ngb-panel>
@@ -230,18 +245,90 @@
       <ngb-tabset>
         <ngb-tab title="Dynamic Portfolio Model">
           <ng-template ngbTabContent>
+            <div style="display: block">
+              <p>Odds of Hitting Target: <strong>{{ oddsDynamic }}</strong></p>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="dynamicDataPercentile" [labels]="dynamicLabelsPercentile"
+                  [options]="dynamicOptionsPercentile" [legend]="dynamicLegendPercentile"
+                  [chartType]="dynamicTypePercentile">
+                </canvas>
+              </div>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="dynamicDataStacked" [labels]="dynamicLabelsStacked"
+                  [options]="dynamicOptionsStacked" [legend]="dynamicLegendStacked" [chartType]="dynamicTypeStacked">
+                </canvas>
+              </div>
+            </div>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="VC Portfolio">
           <ng-template ngbTabContent>
+            <div style="display: block">
+              <p>Odds of Hitting Target: <strong>{{ oddsVCPortfolio }}</strong></p>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="vcPortfolioDataPercentile" [labels]="vcPortfolioLabelsPercentile"
+                  [options]="dynamicOptionsPercentile" [legend]="dynamicLegendPercentile"
+                  [chartType]="dynamicTypePercentile">
+                </canvas>
+              </div>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="vcPortfolioDataStacked" [labels]="vcPortfolioLabelsStacked"
+                  [options]="dynamicOptionsStacked" [legend]="dynamicLegendStacked" [chartType]="dynamicTypeStacked">
+                </canvas>
+              </div>
+            </div>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="B Portfolio">
           <ng-template ngbTabContent>
+            <div style="display: block">
+              <p>Odds of Hitting Target: <strong>{{ oddsBPortfolio }}</strong></p>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="bPortfolioDataPercentile" [labels]="bPortfolioLabelsPercentile"
+                  [options]="dynamicOptionsPercentile" [legend]="dynamicLegendPercentile"
+                  [chartType]="dynamicTypePercentile">
+                </canvas>
+              </div>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="bPortfolioDataStacked" [labels]="bPortfolioLabelsStacked"
+                  [options]="dynamicOptionsStacked" [legend]="dynamicLegendStacked" [chartType]="dynamicTypeStacked">
+                </canvas>
+              </div>
+            </div>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="AG Portfolio">
           <ng-template ngbTabContent>
+            <div style="display: block">
+              <p>Odds of Hitting Target: <strong>{{ oddsAGPortfolio }}</strong></p>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="agPortfolioDataPercentile" [labels]="agPortfolioLabelsPercentile"
+                  [options]="dynamicOptionsPercentile" [legend]="dynamicLegendPercentile"
+                  [chartType]="dynamicTypePercentile">
+                </canvas>
+              </div>
+            </div>
+            <div>
+              <div style="display: block">
+                <canvas baseChart [datasets]="agPortfolioDataStacked" [labels]="agPortfolioLabelsStacked"
+                  [options]="dynamicOptionsStacked" [legend]="dynamicLegendStacked" [chartType]="dynamicTypeStacked">
+                </canvas>
+              </div>
+            </div>
           </ng-template>
         </ngb-tab>
       </ngb-tabset>
